@@ -114,12 +114,16 @@ public class EspetaculosController {
 			return;
 		}
 
-		if (quantidade < 1) {
-			validator.add(new SimpleMessage("", "Você deve escolher um lugar ou mais"));
-		}
-
-		if (!sessao.podeReservar(quantidade)) {
-			validator.add(new SimpleMessage("", "Não existem ingressos disponíveis"));
+		if (quantidade != null){
+			if (quantidade < 1) {
+				validator.add(new SimpleMessage("", "Você deve escolher um lugar ou mais"));
+			}
+	
+			if (!sessao.podeReservar(quantidade)) {
+				validator.add(new SimpleMessage("", "Não existem ingressos disponíveis"));
+			}
+		} else {
+			validator.add(new SimpleMessage("", "Informe uma quantidade válida"));
 		}
 
 		// em caso de erro, redireciona para a lista de sessao
