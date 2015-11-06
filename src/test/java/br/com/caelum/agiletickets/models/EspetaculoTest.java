@@ -225,7 +225,7 @@ public class EspetaculoTest {
 		Assert.assertEquals(5, sessoes.size());
 	  
 	  	//Nao basta apenas verificar o size da lista, precisa garantir que criou as sessoes corretamente:
-		for(int i = 0; i < sessoes.size(); i++) {
+		for(int i = 0; i <= sessoes.size(); i++) {
 			Sessao criada = sessoes.get(i);
 			Assert.assertEquals(show, criada.getEspetaculo());
 			Assert.assertEquals(hoje.plusDays(i).toDateTime(agora), criada.getInicio());
