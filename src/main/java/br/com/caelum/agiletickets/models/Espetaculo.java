@@ -13,8 +13,12 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.jboss.weld.exceptions.IllegalArgumentException;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.Weeks;
 
 @Entity
 public class Espetaculo {
@@ -97,8 +101,31 @@ public class Espetaculo {
      * Repare que a data da primeira sessao é sempre a data inicial.
      */
 	public List<Sessao> criaSessoes(LocalDate inicio, LocalDate fim, LocalTime horario, Periodicidade periodicidade) {
-		// ALUNO: Não apague esse metodo. Esse sim será usado no futuro! ;)
-		return null;
+		
+		if (fim.isBefore(inicio)){
+			throw new IllegalArgumentException("Informe data início maior que data fim");
+		}
+		
+		int periodo = 0;
+		if (periodicidade.equals(Periodicidade.DIARIA)) {
+			periodo = Days.daysBetween(inicio, fim).getDays();
+		} else {
+			periodo = Weeks.weeksBetween(inicio, fim).getWeeks();
+		}
+		for (int i = 0; i <= periodo; i++){
+			Sessao sessao = new Sessao();
+			sessao.setEspetaculo(this);
+			DateTime diaSessao = inicio.toDateTime(horario);
+			if (periodicidade.equals(Periodicidade.DIARIA)) {
+				diaSessao = diaSessao.plusDays(i);
+			} else {
+				diaSessao = diaSessao.plusWeeks(i);
+			}
+			sessao.setInicio(diaSessao);
+			sessoes.add(sessao);
+		}
+		
+		return sessoes;
 	}
 	
 	public boolean Vagas(int qtd, int min)
